@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+    <link type="text/css" rel="stylesheet" href="./thirdPlugin/layui/css/layui.css" />
+    <link type="text/css" rel="stylesheet" href="./css/login.css" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <title>车油监控系统</title>
+</head>
+
+<body>
+    <div class="layui-container layui-anim layui-anim-upbit">
+        <div class="admin-login-background">
+            <div class="layui-form login-form">
+                <form class="layui-form">
+                    <div class="layui-form-item logo-title">
+                        <h1>
+                            车油监控系统</h1>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-icon layui-icon-username" for="Username"></label>
+                        <input type="text" name="username" lay-verify="required" lay-verType="tips" placeholder="请输入登录名"
+                            autocomplete="off" class="layui-input" />
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-icon layui-icon-password" for="Password"></label>
+                        <input type="password" name="password" lay-verify="required" lay-verType="tips"
+                            placeholder="请输入密码" autocomplete="off" class="layui-input" />
+                    </div>
+                    <div class="layui-form-item">
+                        <div id="slider"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="*">登 入</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="./thirdPlugin/plugin/jquery.min.js"></script>
+    <script type="text/javascript" src="./thirdPlugin/plugin/js.cookie.min.js"></script>
+    <script type="text/javascript" src="./thirdPlugin/layui/layui.all.js"></script>
+    <script type="text/javascript" src="./thirdPlugin/layui/sliderVerify/sliderVerify.js"></script>
+    <script type="text/javascript" src="./thirdPlugin/plugin/jquery.particleground.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(function () {
+            // 粒子线条背景
+            $(document).ready(function () {
+                $('.layui-container').particleground({
+                    dotColor: '#5cbdaa',
+                    lineColor: '#5cbdaa'
+                });
+            });
+
+            $(':text[name="username"]').focus();
+
+            var form = layui.form;
+            var verify = layui.sliderVerify;
+            var slider = verify.render({
+                elem: '#slider',
+                isAutoVerify: true
+            });
+
+            form.on('submit(*)', function (data) {
+                if (slider.isOk()) {
+                    var index = layer.load(0, {
+                        shade: [0.2, '#333']
+                    });
+
+                    var params = data.field;
+                    params.grant_type = "password";
+
+                    var url = 'http://localhost:44558/connect/Login';
+
+                    var array = [];
+                    Object.keys(params).forEach(key => array.push(key + '=' + params[key]))
+
+                    fetch(url, {
+                        method: 'POST',
+                        cache: 'no-cache',
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+                        },
+                        body: array.join('&'),
+                        mode: 'cors',
+                    }).then(function (response) {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                    }).then(function (res) {
+                        layer.close(index);
+                        if (res) {
+                            var token = res.access_token;
+
+                            Cookies.set('userName',params.username);
+
+                            // 默认-关闭浏览器清楚cookie，不指定过期时间
+                            Cookies.set('token', token);
+
+                            /*Cookies.set('isLocked', '', {
+                                expires: -1
+                            });*/
+
+                            //window.lockTime && clearInterval(window.lockTime);
+
+                            top.location.href = './index.html';
+                        } else {
+                            layer.alert('系统登陆失败', {
+                                icon: 2
+                            });
+                            return false;
+                        }
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                    return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                }
+            });
+        });
+    </script>
+</body>

@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+    <meta name="renderer" content="webkit" />
+    <meta name="force-rendering" content="webkit" />
+    <script src="./thirdPlugin/plugin/html5shiv.js"></script>
+    <!-- plugin Css-->
+    <link rel="stylesheet" href="./thirdPlugin/layui/css/layui.css" />
+    <link rel="stylesheet" href="./thirdPlugin/awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="./thirdPlugin/layui/jedate/skin/jedate.css" />
+    <!-- <link rel="stylesheet" href="./thirdPlugin/offline/css/map.css" /> -->
+    <!-- end -->
+    <link rel="stylesheet" href="./css/layout.css" />
+    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="./css/page.css" />
+    <link rel="stylesheet" href="./css/common.css" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <!--[if lt IE 9]>
+    <script src="./thirdPlugin/plugin/html5shiv.js"></script>
+    <script src="./thirdPlugin/plugin/respond.min.js"></script>
+    <![endif]-->
+    <title>车油监控系统</title>
+</head>
+
+<body class="layui-layout-body layuimini-all">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header header">
+            <div class="layui-logo layuimini-logo layuimini-back-home">
+                <a href="javascript:;">
+                    <!--<img src="img/logo-icon.png" alt="logo" />-->
+                    <h1>车油监控系统</h1>
+                </a>
+            </div>
+            <div class="layuimini-header-content">
+                <ul lay-filter="sidebar" class="layui-nav layui-layout-left">
+                    <li class="layui-nav-item"><a href="#main/index">首 页</a></li>
+                    <li class="layui-nav-item"><a href="#monitor/index">场站监控</a></li>
+                    <li class="layui-nav-item">
+                        <a href="#report/index">数据报表</a>
+                        <!-- <dl class="layui-nav-child">
+                            <dd><a href="">历史油量统计</a></dd>
+                            <dd><a href="">出车统计</a></dd>
+                            <dd><a href="">报警统计</a></dd>
+                        </dl> -->
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">基础数据</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="#oilDepot/index">油库管理</a></dd>
+                            <dd><a href="#oilTank/index">油罐管理</a></dd>
+                            <dd><a href="#car/index">罐车管理</a></dd>
+                            <dd><a href="#user/index">用户管理</a></dd>
+                            <dd><a href="#role/index">角色管理</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+                <ul class="layui-nav layui-layout-right">
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">
+                            <img src="./img/user_logo.jpg" class="layui-nav-img">
+                            <span id="userName"></span>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <!-- <dd>
+                                <a href="javascript:;" title="修改密码" data-changePwd>修改密码</a>
+                            </dd> 
+                            <dd>
+                                <hr>
+                            </dd> -->
+                            <dd>
+                                <a href="javascript:;" data-Logout>退出登录</a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="layui-body flex">
+            <div class="layuimini-content-page flex-grow">
+                <div class="layuimini-container layuimini-full flex">
+                    <div class="layuimini-main flex-grow flex welcome" id="content"></div>
+                </div>
+            </div>
+        </div>
+        <!-- 模板 -->
+        <div id="layTpl">
+        </div>
+    </div>
+</body>
+
+<!--框架库-->
+<script type="text/javascript" src="./thirdPlugin/framework/lib.js"></script>
+<script type="text/javascript" src="./thirdPlugin/layui/layui.all.js"></script>
+<script type="text/javascript" src="./js/base.js"></script>
+<!-- 框架库end -->
+
+<!--插件库-->
+<script type="text/javascript" src="./thirdPlugin/plugin/js.cookie.min.js"></script>
+<script type="text/javascript" src="./thirdPlugin/plugin/underscore-min.js"></script>
+
+<script type="text/javascript" src="./thirdPlugin/plugin/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="./thirdPlugin/plugin/jquery.ztree.exhide.min.js"></script>
+<script type="text/javascript" src="./thirdPlugin/plugin/jquery.form.js"></script>
+<script type="text/javascript" src="./thirdPlugin/plugin/loading.js"></script>
+
+<script type="text/javascript" src="./thirdPlugin/layui/jedate/dist/jedate.min.js"></script>
+
+<!-- 引入charts -->
+<script type="text/javascript" src="./thirdPlugin/echarts/echarts-all.js"></script>
+
+<!-- 引入离线地图 -->
+<script type="text/javascript" src="./thirdPlugin/offline/map3.0_init.js"></script>
+<script type="text/javascript" src="./thirdPlugin/offline/map3.0.js"></script>
+<script type="text/javascript" src="./thirdPlugin/offline/library/MarkerTool.js"></script>
+<script type="text/javascript" src="./thirdPlugin/offline/library/LuShu.js"></script>
+
+<!-- 通信 -->
+<script type="text/javascript" src="./thirdPlugin/plugin/jquery.signalR.min.js"></script>
+
+<script type="text/javascript" src="./thirdPlugin/layui/excel.min.js"></script>
+
+<script type="text/javascript">
+    /*js对象扩展*/
+    Date.prototype.format = function (format) {
+        var o = {
+            "M+": this.getMonth() + 1, //month
+            "d+": this.getDate(), //day
+            "h+": this.getHours(), //hour
+            "m+": this.getMinutes(), //minute
+            "s+": this.getSeconds(), //second
+            "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+            "S": this.getMilliseconds() //millisecond
+        };
+
+        if (/(y+)/.test(format)) {
+            format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k])
+                    .length));
+            }
+        }
+        return format;
+    };
+
+    $('#userName').text(Cookies.get('userName') || '');
+
+    seajs.use('app', function (app) {
+        app.init();
+    });
+
+    $(function () {
+
+        // parse form
+        $.fn.parseForm = function () {
+            var serializeObj = {};
+            var array = this.serializeArray();
+            var str = this.serialize();
+            $(array).each(function () {
+                if (serializeObj[this.name]) {
+                    if ($.isArray(serializeObj[this.name])) {
+                        serializeObj[this.name].push(this.value);
+                    } else {
+                        serializeObj[this.name] = [serializeObj[this.name], this.value];
+                    }
+                } else {
+                    serializeObj[this.name] = this.value;
+                }
+            });
+            return serializeObj;
+        };
+    });
+</script>
+
+</html>

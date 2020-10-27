@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+
+/*chrome css hack*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .layui-layout-body .layui-tab-content {
+        height: 0;
+    }
+
+    .layui-tab-item.layui-show {
+        overflow: initial;
+    }
+    
+    .welcome{
+        height: 0;
+    }
+}
